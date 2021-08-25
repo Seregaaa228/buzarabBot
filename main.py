@@ -14,6 +14,17 @@ async def on_ready():
 async def play(ctx, url: str):
     voiceChannel = discord.utils.get(ctx.guild.voice_channels, name="General")
     voice = discord.utils.get(client.voice_clients, guild=ctx.guild)
-    await voiceChannel.connect
+    if not voice.is_connected():
+        await voiceChannel.connect()
+
+
+@client.command()
+async def stop(ctx):
+    voice = discord.utils.get(ctx.guild.voice_channels, name="General")
+    if voice.is_connected():
+        await voice.disconnect()
+    else:
+        await ctx.send("БОТ ОФНУЛСЯ")
+
 
 client.run(str(os.environ.get("TOKEN")))
