@@ -11,4 +11,4 @@ async def on_ready():
     print('БОТ ЗАПУЩЕН')
 
 
-print("This is my secret key: " + str(os.environ.get("TOKEN")))
+client.run(str(os.environ.get("TOKEN")))
