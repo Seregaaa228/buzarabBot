@@ -1,5 +1,9 @@
 import discord
-f = open('TOKEN.txt', 'r')
+
+
+token = "ODY2NzE4NDQ2MTc5ODQ0MTA2.YPWodA.4JholynjVlQuJF46OuVnqqGkYXs"
+
+
 
 client = discord.Client()
 
@@ -8,6 +12,5 @@ client = discord.Client()
 async def on_ready():
     print('БОТ ЗАПУЩЕН')
 
+client.run(token)
 
-client.run(f.read())
-f.close()
