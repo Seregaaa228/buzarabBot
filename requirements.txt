@@ -7,3 +7,4 @@ youtube-dl==2021.6.6
 git+https://github.com/Rapptz/discord.py
 ffmpeg
 
+

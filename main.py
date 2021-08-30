@@ -1,10 +1,12 @@
 import discord
+from discord.opus import OpusNotLoaded
 from discord.utils import get
 from discord.ext import commands
 from youtube_dl import YoutubeDL
 from asyncio import sleep
 import os
 import opuslib
+
 client = commands.Bot(command_prefix='-')
 
 
@@ -15,10 +17,23 @@ async def on_ready():
 
 YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist': 'False'}
 FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
-players = {}
-queues = {}
 
 
+raise OpusNotLoaded()
+
+import ctypes.util
+
+print("ctypes - Find opus:")
+a = ctypes.util.find_library('opus')
+print(a)
+
+print("Discord - Load Opus:")
+b = discord.opus.load_opus(a)
+print(b)
+
+print("Discord - Is loaded:")
+c = discord.opus.is_loaded()
+print(c)
 
 
 @client.command()
