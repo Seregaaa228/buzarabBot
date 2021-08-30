@@ -23,9 +23,8 @@ queues = {}
 
 @client.command()
 async def play(ctx, music):
-    discord.opus.load_opus()
     if not discord.opus.is_loaded():
-        raise RuntimeError('Opus failed to load')
+        discord.opus.load_opus('libopus.so')
     global vc
     global info
     try:
@@ -56,9 +55,8 @@ async def play(ctx, music):
 
 @client.command()
 async def p(ctx, music):
-    discord.opus.load_opus()
     if not discord.opus.is_loaded():
-        raise RuntimeError('Opus failed to load')
+        discord.opus.load_opus('libopus.so')
     global vc
     global info
     try:
