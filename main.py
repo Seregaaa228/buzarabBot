@@ -1,30 +1,88 @@
 import discord
-import os
+from discord.utils import get
 from discord.ext import commands
+from youtube_dl import YoutubeDL
+from asyncio import sleep
+import os
 
-client = commands.Bot(command_prefix="-")
+
+client = commands.Bot(command_prefix='-')
 
 
 @client.event
 async def on_ready():
-    print('БОТ ЗАПУЩЕН')
+    print('БОТ ГОТОВ')
+
+
+YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist': 'False'}
+FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
 
 
 @client.command()
-async def play(ctx, url: str):
-    voiceChannel = discord.utils.get(ctx.guild.voice_channels, name="General")
-    voice = discord.utils.get(client.voice_clients, guild=ctx.guild)
-    if not voice.is_connected():
-        await voiceChannel.connect()
+async def play(ctx, music):
+    global vc
+    try:
+        voice_channel = ctx.message.author.voice.channel
+
+        voice = get(client.voice_clients, guild=ctx.guild)
+        if voice and voice.is_connected():
+            vc = await voice.move_to(voice_channel)
+        else:
+            vc = await voice_channel.connect()
+    except AttributeError:
+        await ctx.channel.send("ПОЛЬЗОВАТЕЛЬ НЕ В ГОЛОСОВОМ")
+
+    else:
+        with YoutubeDL(YDL_OPTIONS) as ydl:
+            info = ydl.extract_info(music, download=False)
+
+        URL = info['formats'][0]['url']
+
+        vc.play(discord.FFmpegPCMAudio(executable="ffmpeg.exe", source=URL, **FFMPEG_OPTIONS))
+
+        while vc.is_playing():
+            await sleep(1)
+        if not vc.is_paused():
+            await vc.disconnect()
+
+
+@client.command()
+async def p(ctx, music):
+    global vc
+    try:
+        voice_channel = ctx.message.author.voice.channel
+
+        voice = get(client.voice_clients, guild=ctx.guild)
+        if voice and voice.is_connected():
+            vc = await voice.move_to(voice_channel)
+        else:
+            vc = await voice_channel.connect()
+    except AttributeError:
+        await ctx.channel.send("ПОЛЬЗОВАТЕЛЬ НЕ В ГОЛОСОВОМ")
+
+    else:
+        with YoutubeDL(YDL_OPTIONS) as ydl:
+            info = ydl.extract_info(music, download=False)
+
+        URL = info['formats'][0]['url']
+
+        vc.play(discord.FFmpegPCMAudio(executable="ffmpeg.exe", source=URL, **FFMPEG_OPTIONS))
+
+        while vc.is_playing():
+            await sleep(1200)
+        if not vc.is_paused():
+            await vc.disconnect()
 
 
 @client.command()
 async def stop(ctx):
-    voice = discord.utils.get(ctx.guild.voice_channels, name="General")
-    if voice.is_connected():
-        await voice.disconnect()
+    voice_client = ctx.guild.voice_client
+    if voice_client:
+        await ctx.channel.send('ОТКЛЮЧАЮСЬ')
+        await sleep(1)
+        await voice_client.disconnect()
     else:
-        await ctx.send("БОТ ОФНУЛСЯ")
+        await ctx.channel.send('Я НЕ В КАНАЛЕ')
 
 
-client.run(str(os.environ.get("TOKEN")))
+client.run(os.environ.get("TOKEN"))
