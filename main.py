@@ -19,9 +19,20 @@ FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconne
 players = {}
 queues = {}
 
-discord.opus.load_opus()
-if not discord.opus.is_loaded():
-    raise Exception('Opus failed to load')
+import ctypes
+import ctypes.util
+
+print("ctypes - Find opus:")
+a = ctypes.util.find_library('opus')
+print(a)
+
+print("Discord - Load Opus:")
+b = discord.opus.load_opus(a)
+print(b)
+
+print("Discord - Is loaded:")
+c = discord.opus.is_loaded()
+print(c)
 
 @client.command()
 async def play(ctx, music):
