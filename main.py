@@ -5,7 +5,6 @@ from youtube_dl import YoutubeDL
 from asyncio import sleep
 import os
 
-
 client = commands.Bot(command_prefix='-')
 
 
@@ -16,11 +15,14 @@ async def on_ready():
 
 YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist': 'False'}
 FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
+players = {}
+queues = {}
 
 
 @client.command()
 async def play(ctx, music):
     global vc
+    global info
     try:
         voice_channel = ctx.message.author.voice.channel
 
@@ -38,7 +40,8 @@ async def play(ctx, music):
 
         URL = info['formats'][0]['url']
 
-        vc.play(discord.FFmpegPCMAudio(executable="ffmpeg.exe", source=URL, **FFMPEG_OPTIONS))
+        vc.play(discord.FFmpegPCMAudio(source=URL, **FFMPEG_OPTIONS))
+        await ctx.channel.send('МУЗЫКА ИГРАЕТ - ' + info.get('title'))
 
         while vc.is_playing():
             await sleep(1)
@@ -49,6 +52,7 @@ async def play(ctx, music):
 @client.command()
 async def p(ctx, music):
     global vc
+    global info
     try:
         voice_channel = ctx.message.author.voice.channel
 
@@ -66,7 +70,8 @@ async def p(ctx, music):
 
         URL = info['formats'][0]['url']
 
-        vc.play(discord.FFmpegPCMAudio(executable="ffmpeg.exe", source=URL, **FFMPEG_OPTIONS))
+        vc.play(discord.FFmpegPCMAudio(source=URL, **FFMPEG_OPTIONS))
+        await ctx.channel.send('МУЗЫКА ИГРАЕТ - ' + info.get('title'))
 
         while vc.is_playing():
             await sleep(1200)
