@@ -24,6 +24,8 @@ queues = {}
 @client.command()
 async def play(ctx, music):
     discord.opus.load_opus()
+    if not discord.opus.is_loaded():
+        raise Exception('Opus failed to load')
     global vc
     global info
     try:
@@ -55,6 +57,8 @@ async def play(ctx, music):
 @client.command()
 async def p(ctx, music):
     discord.opus.load_opus()
+    if not discord.opus.is_loaded():
+        raise Exception('Opus failed to load')
     global vc
     global info
     try:
