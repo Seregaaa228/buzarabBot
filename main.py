@@ -4,7 +4,7 @@ from discord.ext import commands
 from youtube_dl import YoutubeDL
 from asyncio import sleep
 import os
-
+import opuslib
 client = commands.Bot(command_prefix='-')
 
 
@@ -23,6 +23,7 @@ queues = {}
 
 @client.command()
 async def play(ctx, music):
+    discord.opus.is_loaded()
     if not discord.opus.is_loaded():
         discord.opus.load_opus('libopus.so')
     global vc
