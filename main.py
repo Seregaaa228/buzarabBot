@@ -29,7 +29,7 @@ async def on_command_error(ctx, error):
 
 @client.command(pass_context = True , aliases=['p'])
 async def join(ctx):
-    channel = ctx.author.voice.channel
+    channel = ctx.message.author.voice.channel
     await channel.connect()
 
 @client.command(pass_context = True , aliases=['s'])
