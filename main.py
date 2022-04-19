@@ -20,7 +20,9 @@ async def on_message(message):
 
 @client.command()
 async def ping(ctx):
-	await ctx.channel.send("pong")
+    channel = ctx.message.author.voice.channel
+    await channel.connect()
+
      
 @client.event
 async def on_command_error(ctx, error):
