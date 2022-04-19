@@ -14,11 +14,6 @@ FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconne
 async def on_ready():
     print(f"We have logged in as {client.user}")
 
-
-@client.event
-async def on_ready():
-    print(f'We have logged in as {client.user}')
-
 @client.listen()
 async def on_message(message):
     if message.content.startswith('бузураб'):
