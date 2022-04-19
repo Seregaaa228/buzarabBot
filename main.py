@@ -21,11 +21,8 @@ async def on_message(message):
 @client.command()
 async def ping(ctx):
         destination = ctx.author.voice.channel
-        if ctx.voice_state.voice:
-            await ctx.voice_state.voice.move_to(destination)
-            return
+        await ctx.send(ctx.author.voice.channel)
 
-        ctx.voice_state.voice = await destination.connect()
 
      
 @client.event
