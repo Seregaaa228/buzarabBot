@@ -3,3 +3,4 @@ python-decouple==3.6
 validators==0.18.2
 discord.py[voice] ~= 1.7.3
 yt_dlp 
+youtubesearchpython
