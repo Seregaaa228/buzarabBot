@@ -33,8 +33,6 @@ async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound ):
        await ctx.send("нету команды такой")      
 
-
-@client.command(pass_context = True , aliases=['s'])
 async def stop(ctx):    
     await ctx.voice_client.disconnect()
 
