@@ -20,8 +20,12 @@ async def on_message(message):
 
 @client.command()
 async def ping(ctx):
-    channel = ctx.message.author.voice.channel
-    await channel.connect()
+        destination = ctx.author.voice.channel
+        if ctx.voice_state.voice:
+            await ctx.voice_state.voice.move_to(destination)
+            return
+
+        ctx.voice_state.voice = await destination.connect()
 
      
 @client.event
@@ -29,10 +33,6 @@ async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound ):
        await ctx.send("нету команды такой")      
 
-@client.command(pass_context = True , aliases=['p'])
-async def join(ctx):
-    channel = ctx.message.author.voice.channel
-    await channel.connect()
 
 @client.command(pass_context = True , aliases=['s'])
 async def stop(ctx):    
