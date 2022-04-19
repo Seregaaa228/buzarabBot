@@ -1,11 +1,18 @@
-
-from decouple import config
 from discord.ext import commands
 import discord
-import validators
+import yt_dlp 
 import os
 
-client = commands.Bot('-')
+from time import sleep
+client = commands.Bot("-")
+
+YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist':'False'}
+FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
+
+
+@client.event
+async def on_ready():
+    print(f"We have logged in as {client.user}")
 
 
 @client.event
@@ -15,8 +22,7 @@ async def on_ready():
 @client.listen()
 async def on_message(message):
     if message.content.startswith('бузураб'):
-        voice = discord.utils.get(client.voice_clients, guild=message.guild)
-        voice.play(discord.FFmpegPCMAudio('sounds\\4xIdzwZN6UsN.128.mp3'))
+       await message.send('я')
 
 @client.command()
 async def ping(ctx):
@@ -27,14 +33,21 @@ async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound ):
         await ctx.send("нема команды такой")      
 
-@client.command(pass_context = True , aliases=['p'])
-async def join(ctx):
-    channel = ctx.author.voice.channel
-    await channel.connect()
+@client.command(pass_context = True, aliases=["p"])
+async def play(ctx, args):
+    voice_channel = ctx.message.author.voice.channel
+    vc = await voice_channel.connect()
+    with yt_dlp.YoutubeDL(YDL_OPTIONS) as ydl:
+            info = ydl.extract_info(args, download = False)
+            url = info.get("url", None)       
+    vc.play(discord.FFmpegPCMAudio(source = url, **FFMPEG_OPTIONS))
+    while vc.is_playing():
+        await sleep(1)
+    await vc.disconnect()
 
 @client.command(pass_context = True , aliases=['s'])
 async def stop(ctx):    
     await ctx.voice_client.disconnect()
 
-
 client.run(os.environ["ACCESS_TOKEN"])
+
