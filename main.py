@@ -51,8 +51,9 @@ async def play(ctx, *, text):
         url = info.get("url", None)
     vc.play(discord.FFmpegPCMAudio(source=url, **FFMPEG_OPTIONS))
     while vc.is_playing():
-        sleep(1)
-    await ctx.voice_client.disconnect()
+            await sleep(1)
+    if not vc.is_paused():
+            await vc.disconnect()
 
 
 @client.command(pass_context=True, aliases=["s"])
