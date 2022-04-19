@@ -3,7 +3,7 @@ from decouple import config
 from discord.ext import commands
 import discord
 import validators
-
+import os
 
 client = commands.Bot('-')
 
@@ -37,4 +37,4 @@ async def stop(ctx):
     await ctx.voice_client.disconnect()
 
 
-client.run(config("TOKEN"))
+client.run(os.environ["ACCESS_TOKEN"])
