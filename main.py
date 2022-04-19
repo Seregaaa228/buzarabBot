@@ -25,7 +25,7 @@ async def ping(ctx):
 @client.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound ):
-        ...      
+        ctx.send("нету команды такой")      
 
 @client.command(pass_context = True , aliases=['p'])
 async def join(ctx):
