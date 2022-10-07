@@ -24,7 +24,7 @@ async def on_ready():
 @client.listen()
 async def on_message(message):
     if message.content.startswith("бузураб"):
-        await message.channel.send("иди нахуй")
+        await message.channel.send("hello")
 
 
 @client.command()
